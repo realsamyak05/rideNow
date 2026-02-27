@@ -40,7 +40,7 @@ function Ride() {
     const [route, setRoute] = useState(null);
     const [fare, setFare] = useState(null);
     const [distance, setDistance] = useState(null);
-
+    const [originalFare, setOriginalFare] = useState(null);
     const [showPool, setShowPool] = useState(false);
     const [driver, setDriver] = useState(null);
     const [driverPosition, setDriverPosition] = useState(null);
@@ -58,6 +58,8 @@ function Ride() {
 
 
     const intervalRef = useRef(null);
+
+
 
     useEffect(() => {
         return () => {
@@ -94,7 +96,8 @@ function Ride() {
         ]);
 
         setRoute(multiRouteCoordinates);
-        setFare(secondRider.discountedFare);
+        const discounted = Math.round(originalFare * 0.85);
+        setFare(discounted);
         setPoolAccepted(true);
         if (secondRider?.rawDistance) {
             const co2Kg = (secondRider.rawDistance * 0.12).toFixed(2);
@@ -153,6 +156,9 @@ function Ride() {
 
             const distanceKm = routeData.distance / 1000;
             const totalFare = Math.round(50 + distanceKm * 12);
+            setOriginalFare(totalFare);
+            setOriginalFare(totalFare);
+            setFare(totalFare);   // ALWAYS set this first
             let rider1Fare = totalFare;
 
             setRoute(routeCoordinates);
@@ -283,8 +289,7 @@ function Ride() {
                         dropCoords: rider2DropCoords,
                         pickup: "Auto-matched along route",
                         drop: "Auto-matched along route",
-                        rawDistance: rider2DistanceKm,
-                        discountedFare: rider1Fare   // ✅ store directly
+                        rawDistance: rider2DistanceKm
                     });
 
                     setShowPool(true);
@@ -474,7 +479,18 @@ function Ride() {
                 {fare && (
                     <div style={{ marginTop: "15px", color: "white" }}>
                         <p>Distance: {distance} km</p>
-                        <h3>Estimated Fare: ₹{fare}</h3>
+
+                        {rideType === "pool" && !poolAccepted ? (
+                            <>
+                                <h3>Original Fare: ₹{originalFare}</h3>
+
+                                <div style={{ height: "8px" }}></div>  {/* spacing */}
+
+                                <h3>After Pool Discount (15%): ₹{Math.round(originalFare * 0.85)}</h3>
+                            </>
+                        ) : (
+                            <h3>Your Fare: ₹{'90'}</h3>
+                        )}
                     </div>
                 )}
                 {poolAccepted && secondRider && (
