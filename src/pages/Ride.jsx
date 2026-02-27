@@ -40,7 +40,7 @@ function Ride() {
     const [route, setRoute] = useState(null);
     const [fare, setFare] = useState(null);
     const [distance, setDistance] = useState(null);
-    const [poolFare, setPoolFare] = useState(null);
+
     const [showPool, setShowPool] = useState(false);
     const [driver, setDriver] = useState(null);
     const [driverPosition, setDriverPosition] = useState(null);
@@ -94,7 +94,7 @@ function Ride() {
         ]);
 
         setRoute(multiRouteCoordinates);
-        setFare(prev => poolFare);
+        setFare(secondRider.discountedFare);
         setPoolAccepted(true);
         if (secondRider?.rawDistance) {
             const co2Kg = (secondRider.rawDistance * 0.12).toFixed(2);
@@ -104,6 +104,8 @@ function Ride() {
     };
 
     const handleRideRequest = async () => {
+
+        setCo2Saved(null);
 
         setShowPool(false);
         setPoolAccepted(false);
@@ -281,7 +283,8 @@ function Ride() {
                         dropCoords: rider2DropCoords,
                         pickup: "Auto-matched along route",
                         drop: "Auto-matched along route",
-                        rawDistance: rider2DistanceKm
+                        rawDistance: rider2DistanceKm,
+                        discountedFare: rider1Fare   // ✅ store directly
                     });
 
                     setShowPool(true);
@@ -523,7 +526,7 @@ function Ride() {
 
                         <hr style={{ opacity: 0.3 }} />
 
-                        <h4>Your Fare: ₹{poolFare}</h4>
+                        <h4>Your Fare: ₹{secondRider.discountedFare}</h4>
                         <p>{secondRider.name}'s Fare: ₹{secondRider.fare}</p>
 
                         <button
