@@ -263,7 +263,7 @@ function Ride() {
                 rider1Fare = Math.round(totalFare * 0.85);
                 const rider2Fare = Math.round((50 + rider2DistanceKm * 12) * 0.85);
 
-                setPoolFare(rider1Fare);
+
 
                 const possibleRiders = [
                     { name: "Ananya Kapoor", rating: 4.6, gender: "female", fare: rider2Fare },
