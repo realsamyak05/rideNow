@@ -94,7 +94,7 @@ function Ride() {
         ]);
 
         setRoute(multiRouteCoordinates);
-        setFare(poolFare);
+        setFare(prev => poolFare);
         setPoolAccepted(true);
         if (secondRider?.rawDistance) {
             const co2Kg = (secondRider.rawDistance * 0.12).toFixed(2);
